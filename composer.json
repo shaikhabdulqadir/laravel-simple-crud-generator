@@ -1,0 +1,14 @@
+{
+    "name": "abdul-qadir/laravel-simple-crud-aq",
+    "description": "this will generate simple CRUD for any database table",
+	"authors": [
+        {
+            "name": "Abdul Qadir",
+            "email": "abdulqadirshaikh101@gmail.com"
+        }
+    ],
+    "type": "metapackage",
+    "license": "1",
+    "minimum-stability": "dev",
+    "require": {}
+}
