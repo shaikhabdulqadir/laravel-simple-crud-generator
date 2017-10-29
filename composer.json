@@ -9,6 +9,6 @@
     ],
     "type": "metapackage",
     "license": "1",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {}
 }
