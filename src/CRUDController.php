@@ -10,7 +10,9 @@ class CRUDController extends Controller
 	 public function index()
     {
         $tables = \DB::select('SHOW TABLES');
-
+  // \Session::flash('flash_message', 'Your abc table CRUD has been successfully 
+        	// generated <a href="/dd" class="alert-link">Click here</a>. to view');
+            
         // print_r($tables);return;
         return view('crud::home')->with(['tables' => $tables]);
     }
@@ -31,10 +33,15 @@ class CRUDController extends Controller
         $this->generateIndex($class,$columns);
         $this->generateCreateView($class,$columns);
         $this->generateView($class,$columns);
+        $this->generateUpdateView($class,$columns);
         $this->createRoute($class);
 
-        \Session::flash('flash_message', 'Your '.$post['table'].' table CRUD has been successfully generated <a href="/'.$post['table'].'" class="alert-link">Click here</a>. to view');
-            return redirect('/');
+        // \Session::flash('flash_message', 'Your '.$post['table'].' table CRUD has been successfully 
+        // 	generated <a href="/'.$post['table'].'" target="\blank" class="alert-link">Click here</a>. to view');
+            
+        // $tables = \DB::select('SHOW TABLES');
+        // return view('crud::home')->with(['tables' => $tables]);
+            return redirect('crud-generator');
     }
 
 
@@ -206,10 +213,10 @@ class ".$class."Controller extends Controller
 
     public function edit(\$id)
     {
-        \$table_name = $class::find(\$id);
+        \$$table_name = $class::find(\$id);
 
 
-        return view('$table_name.update')->with(['$table_name' => $table_name]);
+        return view('$table_name.update')->with(['$table_name' => \$$table_name]);
     }
 
     public function update(Request \$request, \$id)
@@ -348,6 +355,49 @@ fclose($myfile);
 
 $myfile = fopen(base_path()."\\resources\\views\\$table_name\\view.blade.php", "w") or die("Unable to open file!");
 fwrite($myfile, $view);
+fclose($myfile);
+
+    }
+
+
+    public function generateUpdateView($table_name,$columns)
+    {
+    	$fields = "";
+
+    foreach ($columns as $key => $value) {
+        $fields .= '  <div class="form-group">
+    <label for="">'.ucwords(str_replace("_", " ", $value)).'</label>
+    <input type="text" class="form-control"  name='.$value.' value="{{$'.$table_name.'->'.$value.'}}" aria-describedby="emailHelp" >
+  </div>';
+    }
+
+        $create_view = '
+@extends("layouts.blank")
+
+@push("stylesheets")
+    <!-- Example -->
+    <!--<link href=" <link href="{{ asset("css/myFile.min.css") }}" rel="stylesheet">" rel="stylesheet">-->
+@endpush
+
+@section("main_container")
+
+    <div class="right_col" role="main">
+        <h1>Create</h1>
+        
+        <form action="/'.$table_name.'/update/{{$'.$table_name.'->id}}" method="post">
+
+            {{ csrf_field() }}
+
+            '.$fields.'
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    </div>
+
+@endsection';
+
+$myfile = fopen(base_path()."\\resources\\views\\$table_name\\update.blade.php", "w") or die("Unable to open file!");
+fwrite($myfile, $create_view);
 fclose($myfile);
 
     }
